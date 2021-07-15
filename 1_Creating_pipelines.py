@@ -56,3 +56,21 @@ step2 = PythonScriptStep(name = 'train model',
                          compute_target = 'aml-cluster',
                          # Pass as script argument
                          arguments=['--training-data', prepped_data.as_input()])
+
+
+### Publishing a pipeline
+
+published_pipeline = pipeline.publish(name='training_pipeline',
+                                          description='Model training pipeline',
+                                          version='1.0')
+
+# or publish the pipeline after a successful run of pipeline
+
+# Get the most recent run of the pipeline
+pipeline_experiment = ws.experiments.get('training-pipeline')
+run = list(pipeline_experiment.get_runs())[0]
+
+# Publish the pipeline from the run
+published_pipeline = run.publish_pipeline(name='training_pipeline',
+                                          description='Model training pipeline',
+                                          version='1.0')
