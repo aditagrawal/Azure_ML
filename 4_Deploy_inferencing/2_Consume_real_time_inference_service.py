@@ -1,3 +1,10 @@
+### Defining service
+
+from azureml.core.webservice import AksWebservice
+
+# Get the deployed service
+service = AksWebservice(name='classifier-service', workspace=ws)
+
 ## Below is data in json format
 
 {
