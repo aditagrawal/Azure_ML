@@ -1,0 +1,13 @@
+from azureml.pipeline.steps import PythonScriptStep
+
+# Step to run a Python script
+step1 = PythonScriptStep(name = 'prepare data',
+                         source_directory = 'scripts',
+                         script_name = 'data_prep.py',
+                         compute_target = 'aml-cluster')
+
+# Step to train a model
+step2 = PythonScriptStep(name = 'train model',
+                         source_directory = 'scripts',
+                         script_name = 'train_model.py',
+                         compute_target = 'aml-cluster')
