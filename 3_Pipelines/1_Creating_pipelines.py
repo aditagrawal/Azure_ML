@@ -115,3 +115,27 @@ response = requests.post(rest_endpoint,
                          json={"ExperimentName": "run_training_pipeline",
                                "ParameterAssignments": {"reg_rate": 0.1}})
 
+### Scheduling a Pipeline after it is published
+# Below Pipeline has a daily run
+
+from azureml.pipeline.core import ScheduleRecurrence, Schedule
+
+daily = ScheduleRecurrence(frequency='Day', interval=1)
+pipeline_schedule = Schedule.create(ws, name='Daily Training',
+                                        description='trains model every day',
+                                        pipeline_id=published_pipeline.id,
+                                        experiment_name='Training_Pipeline',
+                                        recurrence=daily)
+
+# Below Pipeline has a run on data changes
+
+from azureml.core import Datastore
+from azureml.pipeline.core import Schedule
+
+training_datastore = Datastore(workspace=ws, name='blob_data')
+pipeline_schedule = Schedule.create(ws, name='Reactive Training',
+                                    description='trains model on data change',
+                                    pipeline_id=published_pipeline_id,
+                                    experiment_name='Training_Pipeline',
+                                    datastore=training_datastore,
+                                    path_on_datastore='data/training')
