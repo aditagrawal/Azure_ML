@@ -74,3 +74,19 @@ run = list(pipeline_experiment.get_runs())[0]
 published_pipeline = run.publish_pipeline(name='training_pipeline',
                                           description='Model training pipeline',
                                           version='1.0')
+
+# After publishing you can view it in AML studio
+
+rest_endpoint = published_pipeline.endpoint
+#print(rest_endpoint)
+
+### Using a published pipeline
+
+import requests
+
+response = requests.post(rest_endpoint,
+                         headers=auth_header,
+                         json={"ExperimentName": "run_training_pipeline"})
+run_id = response.json()["Id"]
+#print(run_id)
+
